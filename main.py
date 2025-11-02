@@ -14,7 +14,7 @@ boot_animation(oled)
 
 # === Define available apps ===
 apps = [
-    ("Clock", print("Clock app placeholder")),  # Replace with clock_app.run
+    ("Clock", clock_app.run),  # Replace with clock_app.run
     ("Tetris", tetris_app.run),
     ("Stuff", print("Comms app placeholder")),  # Replace with comms_app.run
 ]

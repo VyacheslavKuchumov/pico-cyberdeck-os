@@ -1,19 +1,20 @@
-# import time
-# from machine import I2C, Pin
-# from lib.ds3231 import DS3231  # You must have this driver
+import time
+from machine import I2C, Pin
+from lib.ds3231 import RTC  
+from controls import Controls
 
-# def run(oled):
-#     i2c = I2C(1, scl=Pin(3), sda=Pin(2))
-#     rtc = DS3231(i2c)
+def run(oled):
+    
+    rtc = RTC(sda_pin=2, scl_pin=3, port=1)
+    controls = Controls()
 
-#     while True:
-#         oled.fill(0)
-#         dt = rtc.datetime()
-#         oled.text("Clock App", 0, 0)
-#         oled.text(f"{dt[4]:02d}:{dt[5]:02d}:{dt[6]:02d}", 20, 30)
-#         oled.text("Press SELECT to exit", 0, 56)
-#         oled.show()
-#         time.sleep(1)
-#         # Exit on SELECT press
-#         if Pin(15, Pin.IN, Pin.PULL_UP).value() == 0:
-#             break
+    while True:
+        oled.fill(0)
+        current_time = rtc.DS3231_ReadTime(mode=1)
+        oled.text("Clock App", 0, 0)
+        oled.text(current_time, 22, 30)
+        oled.show()
+        time.sleep(0.2)
+        # Exit on CANCEL press
+        if not controls.btn_cancel.value():
+            break
