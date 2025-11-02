@@ -1,16 +1,24 @@
 from machine import Pin, I2C
-from ssd1306 import SSD1306_I2C
+from lib.ssd1306 import SSD1306_I2C
+import time
+from animation import boot_animation
+from menu import Menu
+from apps import clock_app, tetris_app, comms_app
 
-# Initialize I2C on Pico
+# === Initialize I2C and OLED ===
 i2c = I2C(0, scl=Pin(1), sda=Pin(0), freq=200000)
-
-print("I2C devices:", [hex(addr) for addr in i2c.scan()])
-
-# Create display object (adjust addr if scan shows 0x3d)
 oled = SSD1306_I2C(128, 64, i2c, addr=0x3C)
 
-# Test output
-oled.fill(0)
-oled.text("Hello, Pico!", 0, 0)
-oled.text("SSD1306 OK", 0, 10)
-oled.show()
+# === Boot animation ===
+boot_animation(oled)
+
+# === Define available apps ===
+apps = [
+    ("Clock", print("Clock app placeholder")),  # Replace with clock_app.run
+    ("Tetris", tetris_app.run),
+    ("Stuff", print("Comms app placeholder")),  # Replace with comms_app.run
+]
+
+# === Create and show menu ===
+menu = Menu(oled, apps)
+menu.run()
